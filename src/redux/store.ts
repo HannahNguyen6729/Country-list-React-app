@@ -1,45 +1,17 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import createSagaMiddleware from 'redux-saga'
-import thunk from 'redux-thunk'
-
-import { AppState } from '../types'
-import createRootReducer from './reducers'
-import rootSaga from './sagas'
-
-const initState: AppState = {
-  product: {
-    inCart: [],
+import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit'
+import countryReducer from './slice/countrySlice'
+export const store = configureStore({
+  reducer: {
+    countryReducer: countryReducer,
   },
-  ui: {
-    dialogOpen: {},
-  },
-}
-
-export default function makeStore(initialState = initState) {
-  const sagaMiddleware = createSagaMiddleware()
-  const middlewares = [sagaMiddleware, thunk]
-  let composeEnhancers = compose
-
-  if (process.env.NODE_ENV === 'development') {
-    if ((window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
-      composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    }
-  }
-
-  const store = createStore(
-    createRootReducer(),
-    initialState,
-    composeEnhancers(applyMiddleware(...middlewares))
-  )
-
-  sagaMiddleware.run(rootSaga)
-
-  if ((module as any).hot) {
-    ;(module as any).hot.accept('./reducers', () => {
-      const nextReducer = require('./reducers').default
-      store.replaceReducer(nextReducer)
-    })
-  }
-
-  return store
-}
+})
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof store.getState>
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof store.dispatch
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>

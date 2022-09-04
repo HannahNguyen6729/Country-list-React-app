@@ -1,11 +1,12 @@
 import React from 'react'
-
-import Routes from './Routes'
+import Home from './pages/Home'
+import MuiDemo from './pages/MuiDemo'
 
 export default function App() {
   return (
     <>
-      <Routes />
+      <Home />
+      <MuiDemo />
     </>
   )
 }
