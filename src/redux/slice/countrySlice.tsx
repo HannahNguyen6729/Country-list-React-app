@@ -38,10 +38,10 @@ export const countrySlice = createSlice({
         state.countriesList = state.countriesList.map((item) => {
           return { ...item, quantity: 0 };
         });
-        localStorage.setItem(
-          "countriesList",
-          JSON.stringify(state.countriesList)
-        );
+        // localStorage.setItem(
+        //   "countriesList",
+        //   JSON.stringify(state.countriesList)
+        // );
       });
     },
 });
